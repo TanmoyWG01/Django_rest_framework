@@ -10,6 +10,9 @@ from employees.models import Employee
 from django.http import Http404
 from rest_framework import mixins, generics, viewsets
 from rest_framework.viewsets import ModelViewSet
+from blogs.models import Blog, Comment
+from blogs.serializers import BlogSerializers, CommentSerializers
+from .paginations import CustomPagination                                                       
 
 # Function based views
 
@@ -170,7 +173,32 @@ class EmployeeViewset(viewsets.ViewSet):
 
 """
 
-
+# Used viewsel ModelViewSet 
 class EmployeeViewset(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializers
+    pagination_class = CustomPagination
+
+
+# Nested Serializers 
+class BlogsView(generics.ListCreateAPIView):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerializers
+
+class CommentsView(generics.ListCreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializers
+
+
+class BlogDetailsView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerializers
+    lookup_field = "pk"
+
+
+class CommentDetailsView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializers
+    lookup_field = "pk" #if you work on any big blog application on any ecommerce application then you use "slug".
+
+

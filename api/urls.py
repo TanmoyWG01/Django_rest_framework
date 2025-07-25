@@ -1,6 +1,6 @@
 from django.urls import path, include
 from . import views
-from rest_framework.routers import DefaultRouter #For working with viewset this need to ude
+from rest_framework.routers import DefaultRouter 
 
 router = DefaultRouter()
 router.register('employees', views.EmployeeViewset, basename='employee')
@@ -15,5 +15,12 @@ urlpatterns = [
     # path('employees/<int:pk>/', views.EmployeeDetail.as_view())
 
     # ViewSet
-    path('', include(router.urls))
+    path('', include(router.urls)),
+
+    # nested serializers 
+    path('blogs/', views.BlogsView.as_view()),
+    path('comments/', views.CommentsView.as_view()),
+
+    path('blogs/<int:pk>/', views.BlogDetailsView.as_view()),
+    path('comments/<int:pk>/', views.CommentDetailsView.as_view()),
 ]  
