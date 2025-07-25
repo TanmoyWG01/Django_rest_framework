@@ -12,7 +12,10 @@ from rest_framework import mixins, generics, viewsets
 from rest_framework.viewsets import ModelViewSet
 from blogs.models import Blog, Comment
 from blogs.serializers import BlogSerializers, CommentSerializers
-from .paginations import CustomPagination                                                       
+from .paginations import CustomPagination
+from employees.filters import EmployeeFilter 
+from rest_framework.filters import SearchFilter, OrderingFilter
+# from django_filters.rest_framework import DjangoFilterBackend
 
 # Function based views
 
@@ -178,12 +181,16 @@ class EmployeeViewset(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializers
     pagination_class = CustomPagination
+    filterset_class = EmployeeFilter
 
 
 # Nested Serializers 
 class BlogsView(generics.ListCreateAPIView):
     queryset = Blog.objects.all()
     serializer_class = BlogSerializers
+    filter_backends = [SearchFilter, OrderingFilter] #DjangoFilterBackend we all so included that
+    search_fields = ['blog_title', 'blog_body'] #^ this symbol is use for search any that start for the name you search. mean for example you want only show the blogs that the blog title starts with india.
+    ordering_fields = ['id', 'blog_title']
 
 class CommentsView(generics.ListCreateAPIView):
     queryset = Comment.objects.all()
